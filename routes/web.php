@@ -2,21 +2,14 @@
 
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
+use App\Http\Controllers\TasksController;
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('home');
+Route::get('/', [TasksController::class, 'show'])->name('home');
+Route::get('/addtask', [TasksController::class, 'add'])->name('addtask');
+Route::post('/storetask', [TasksController::class, 'store'])->name('storetask');
+Route::post('/task_priority_reorder', [TasksController::class, 'priority_reorder'])->name('task_priority_reorder');
+Route::get('/task_edit/{id}', [TasksController::class, 'edit'])->name('task_edit');
+Route::post('/update_task/{id}', [TasksController::class, 'update'])->name('update_task');
 
-Route::view('dashboard', 'dashboard')
-    ->middleware(['auth', 'verified'])
-    ->name('dashboard');
-
-Route::middleware(['auth'])->group(function () {
-    Route::redirect('settings', 'settings/profile');
-
-    Volt::route('settings/profile', 'settings.profile')->name('settings.profile');
-    Volt::route('settings/password', 'settings.password')->name('settings.password');
-    Volt::route('settings/appearance', 'settings.appearance')->name('settings.appearance');
-});
 
 require __DIR__.'/auth.php';
